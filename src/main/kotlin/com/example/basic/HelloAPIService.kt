@@ -1,5 +1,6 @@
 package com.example.basic
 
+
 import jakarta.inject.Singleton
 
 @Singleton

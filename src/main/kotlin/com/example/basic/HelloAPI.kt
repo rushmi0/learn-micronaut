@@ -8,8 +8,10 @@ import jakarta.inject.Inject
 @Controller("api/hello")
 class HelloAPI {
 
+
     @Inject
     lateinit var service: HelloAPIService
+
 
     @Get(produces = [MediaType.TEXT_PLAIN])
     fun helloAPI(): String {
