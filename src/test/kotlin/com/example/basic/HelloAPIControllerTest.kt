@@ -19,13 +19,13 @@ class HelloAPIControllerTest {
     @Test
     fun helloAPIEndpointRespondsWithProperContent() {
         val response = client.toBlocking().retrieve("api/hello")
-        assertEquals("Hello API", response)
+        assertEquals("Hello API from Service", response)
     }
 
     @Test
     fun helloAPIEndpointRespondsWithProperStatusCodeContent() {
         val response = client.toBlocking().exchange("api/hello", String::class.java)
-        assertEquals("Hello API", response.body())
+        assertEquals("Hello API from Service", response.body())
         assertEquals(HttpStatus.OK, response.status)
     }
 
