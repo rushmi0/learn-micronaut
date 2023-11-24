@@ -6,14 +6,14 @@
 
         <encoder>
             <pattern>
-                [%cyan(%d{dd-MM-yyyy})] [%cyan(%d{HH:mm:ss.SSS})] %green([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n
+                [%cyan(%d{dd-MM-yyyy})][%cyan(%d{HH:mm:ss.SSS})] %green([%thread]) %highlight(%-5level) %magenta(%logger{36}) - [%msg]%n
             </pattern>
         </encoder>
     </appender>
 
 <!--    trace-->
-    <root level="info ">
-        <appender-ref ref="STDOUT"/>ss
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
     </root>
 
 </configuration>

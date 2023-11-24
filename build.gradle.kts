@@ -10,12 +10,14 @@ plugins {
 version = "0.1"
 group = "com.example"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
+val kotlinVersion= project.properties["kotlinVersion"]
 repositories {
     mavenCentral()
 }
 
 dependencies {
+
+
     ksp("io.micronaut:micronaut-http-validation")
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
@@ -26,6 +28,18 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("io.micronaut:micronaut-http-client")
+
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+
+    runtimeOnly("org.postgresql:postgresql")
+
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
+    implementation("org.bouncycastle:bcpkix-jdk15on:1.70")
+
+    // https://mvnrepository.com/artifact/io.micronaut.sql/micronaut-jdbc-hikari
+    testImplementation("io.micronaut.sql:micronaut-jdbc-hikari:3.0.1")
+
+
 }
 
 
