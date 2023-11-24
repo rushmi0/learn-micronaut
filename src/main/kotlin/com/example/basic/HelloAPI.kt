@@ -5,7 +5,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import jakarta.inject.Inject
 
-//
+// * Constructor based injection
 
 @Controller("api/hello")
 class HelloAPI @Inject constructor(
