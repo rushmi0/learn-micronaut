@@ -23,7 +23,11 @@ class FileController {
     @Throws(IOException::class)
     fun uploadFile(@Part file: CompletedFileUpload): Boolean {
         val targetFile = File("$pathDirectory/${file.filename}")
-        Files.copy(file.inputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(
+            file.inputStream,
+            targetFile.toPath(),
+            StandardCopyOption.REPLACE_EXISTING
+        )
         return true
     }
 
