@@ -30,5 +30,12 @@ class HelloAPIControllerTest {
         assertEquals(HttpStatus.OK, response.status)
     }
 
+    @Test
+    fun helloAPIControllerTest() {
+        val response = client.toBlocking().exchange("hello", String::class.java)
+        assertEquals("Hello API from Service", response.body())
+        assertEquals(HttpStatus.OK, response.status)
+    }
+
 
 }
