@@ -1,7 +1,9 @@
 package com.example.hello
 
+import io.micronaut.context.annotation.Primary
 import jakarta.inject.Singleton
 
+@Primary
 @Singleton
 class HelloAPIService : MyServiceImp  {
 
