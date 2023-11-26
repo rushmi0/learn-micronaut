@@ -43,12 +43,38 @@ dependencies {
 }
 
 
+tasks {
+
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+
+}
+
+kotlin {
+
+    sourceSets.all {
+        languageSettings {
+            version = 2.0
+        }
+    }
+}
+
+
 application {
     mainClass.set("com.example.ApplicationKt")
 }
-java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-}
+//java {
+//    sourceCompatibility = JavaVersion.toVersion("17")
+//}
 
 
 graalvmNative.toolchainDetection.set(false)
