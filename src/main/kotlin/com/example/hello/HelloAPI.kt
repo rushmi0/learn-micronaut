@@ -1,4 +1,4 @@
-package com.example.basic
+package com.example.hello
 
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
