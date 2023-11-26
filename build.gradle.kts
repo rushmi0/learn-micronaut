@@ -10,7 +10,7 @@ plugins {
 version = "0.1"
 group = "com.example"
 
-val kotlinVersion= project.properties["kotlinVersion"]
+val kotlinVersion = project.properties["kotlinVersion"]
 repositories {
     mavenCentral()
 }
@@ -18,16 +18,26 @@ repositories {
 dependencies {
 
 
+    // https://mvnrepository.com/artifact/io.micronaut/micronaut-websocket
+    implementation("io.micronaut:micronaut-websocket:4.2.0")
+
+
     ksp("io.micronaut:micronaut-http-validation")
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
+
+    implementation("org.apache.logging.log4j:log4j-api")
+    implementation(platform("org.apache.logging.log4j:log4j-bom:2.20.0"))
+
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
-    compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("io.micronaut:micronaut-http-client")
+
+    runtimeOnly("org.apache.logging.log4j:log4j-core")
+    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl")
 
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
 
@@ -86,8 +96,8 @@ micronaut {
         annotations("com.example.*")
     }
     aot {
-    // Please review carefully the optimizations enabled below
-    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        // Please review carefully the optimizations enabled below
+        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
         optimizeServiceLoading.set(false)
         convertYamlToJava.set(false)
         precomputeOperations.set(true)
