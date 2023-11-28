@@ -10,88 +10,31 @@ plugins {
 version = "0.1"
 group = "com.example"
 
-val kotlinVersion = project.properties["kotlinVersion"]
+val kotlinVersion = project.properties.get("kotlinVersion")
 repositories {
     mavenCentral()
 }
 
 dependencies {
-
-
-    // https://mvnrepository.com/artifact/io.micronaut/micronaut-websocket
-    implementation("io.micronaut:micronaut-websocket:4.2.0")
-
-
     ksp("io.micronaut:micronaut-http-validation")
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
-
-    implementation("org.apache.logging.log4j:log4j-api")
-    implementation(platform("org.apache.logging.log4j:log4j-bom:2.20.0"))
-
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
-
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-//    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-//    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
-
     testImplementation("io.micronaut:micronaut-http-client")
-
-    runtimeOnly("org.apache.logging.log4j:log4j-core")
-    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl")
-
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-
-    runtimeOnly("org.postgresql:postgresql")
-
-    // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
-    implementation("org.bouncycastle:bcpkix-jdk15on:1.70")
-
-    // https://mvnrepository.com/artifact/io.micronaut.sql/micronaut-jdbc-hikari
-    testImplementation("io.micronaut.sql:micronaut-jdbc-hikari:3.0.1")
-
-    // https://mvnrepository.com/artifact/javax.validation/validation-api
-    implementation("javax.validation:validation-api:2.0.1.Final")
-
-
-}
-
-
-tasks {
-
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "17"
-        }
-    }
-
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "17"
-        }
-    }
-
-}
-
-kotlin {
-
-    sourceSets.all {
-        languageSettings {
-            version = 2.0
-        }
-    }
 }
 
 
 application {
     mainClass.set("com.example.ApplicationKt")
 }
-//java {
-//    sourceCompatibility = JavaVersion.toVersion("17")
-//}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+}
 
 
 graalvmNative.toolchainDetection.set(false)

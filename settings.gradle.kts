@@ -1,3 +1,2 @@
-
-rootProject.name="learnKotlinMicronaut"
+rootProject.name = "learnkotlinmicronaut"
 
