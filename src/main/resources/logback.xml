@@ -13,10 +13,10 @@
 
 
     <logger name="com.example.hello" level="DEBUG"/>
-    <Logger name="io.micronaut.context.condition" level="DEBUG"/>
+<!--    <Logger name="io.micronaut.context.condition" level="DEBUG"/>-->
 
 <!--  info  trace-->
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="STDOUT"/>
 
     </root>

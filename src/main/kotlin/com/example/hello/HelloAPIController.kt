@@ -1,18 +1,16 @@
 package com.example.hello
 
+import io.micronaut.context.annotation.Value
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
-import jakarta.inject.Inject
-
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-// * Dependency Injection - Interface
-
 @Controller("hello")
-class HelloAPIController @Inject constructor(
-    private val service: MyServiceImp // MyServiceImp : มาจาก Interface
+class HelloAPIController(
+    private val service: MyServiceImp,
+    @Value("\${hello.world.message}") private val helloAPIConfig: String,
+    private val dataTransformationConfig: HelloAPItransformationConfig
 ) {
 
     private val LOG = LoggerFactory.getLogger(HelloAPIController::class.java)
@@ -22,4 +20,19 @@ class HelloAPIController @Inject constructor(
         LOG.debug("Called the hello API!")
         return service.helloAPIFromService()
     }
+
+    // * Configuration Injection
+    @Get(uri = "/config", produces = [MediaType.TEXT_PLAIN])
+    fun helloConfig(): String {
+        LOG.debug("Return Hello API from Config Message: $helloAPIConfig")
+        return helloAPIConfig
+    }
+
+    // * Immutable Configuration Injection
+    @Get(uri = "/transformation", produces = [MediaType.APPLICATION_JSON])
+    fun helloAPITransfromation(): HelloAPItransformationConfig  {
+        return dataTransformationConfig
+    }
+
+
 }

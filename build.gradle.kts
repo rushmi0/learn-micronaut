@@ -33,7 +33,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     runtimeOnly("ch.qos.logback:logback-classic")
+
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+//    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+//    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+
     testImplementation("io.micronaut:micronaut-http-client")
 
     runtimeOnly("org.apache.logging.log4j:log4j-core")
@@ -48,6 +52,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.micronaut.sql/micronaut-jdbc-hikari
     testImplementation("io.micronaut.sql:micronaut-jdbc-hikari:3.0.1")
+
+    // https://mvnrepository.com/artifact/javax.validation/validation-api
+    implementation("javax.validation:validation-api:2.0.1.Final")
 
 
 }
