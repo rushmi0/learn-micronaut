@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS UserProfiles
     first_name    VARCHAR(255),
     last_name     VARCHAR(255),
     bank_name     VARCHAR(255) DEFAULT 'N/A',
-    bank_number   INTEGER CHECK (LENGTH(CAST(bank_number AS VARCHAR)) = 10),              -- bank_number ต้องมีความยาวที่เท่ากับ 10 ตัวตัวเลข.
+    bank_number   INTEGER CHECK (LENGTH(CAST(bank_number AS VARCHAR)) = 10) DEFAULT 'N/A',              -- bank_number ต้องมีความยาวที่เท่ากับ 10 ตัวตัวเลข.
     email         VARCHAR(255) CHECK (email LIKE '%_@_%._%') UNIQUE,
     phone_number  VARCHAR(10) UNIQUE,
     created_at    TIMESTAMPTZ  DEFAULT now(),
