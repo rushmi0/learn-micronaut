@@ -36,12 +36,6 @@ CREATE TABLE IF NOT EXISTS UserAuthentication
     CONSTRAINT shared_key_positive CHECK (shared_key > 0)                  -- ตรวจสอบว่า shared_key เป็นจำนวนเต็มบวก
 );
 
--- โค้ดต่อไปนี้จะเป็นการเพิ่ม Index เพื่อเพิ่มประสิทธิภาพในการค้นหา
-CREATE INDEX idx_users_public_key ON UserAuthentication (public_key);
-CREATE INDEX idx_users_server_private_key ON UserAuthentication (server_private_key);
-CREATE INDEX idx_share_key ON UserAuthentication (shared_key);
-
-
 -- //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 -- สร้างตาราง DogWalkers
@@ -99,10 +93,18 @@ CREATE TABLE IF NOT EXISTS DogWalkerReviews
     review_text VARCHAR(500) -- ข้อความรีวิวที่ผู้ใช้ให้
 );
 
+
+-- //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 -- โค้ดต่อไปนี้จะเป็นการเพิ่ม Index เพื่อเพิ่มประสิทธิภาพในการค้นหา
 CREATE INDEX idx_users_email ON UserProfiles (email);
 CREATE INDEX idx_reviews_walkerid ON DogWalkerReviews (walker_id);
 CREATE INDEX idx_reviews_userid ON DogWalkerReviews (user_id);
+
+CREATE INDEX idx_users_public_key ON UserAuthentication (public_key);
+CREATE INDEX idx_users_server_private_key ON UserAuthentication (server_private_key);
+CREATE INDEX idx_share_key ON UserAuthentication (shared_key);
+
 
 
 -- //////////////////////////////////////////////////////////////////////////////////////////////////////
