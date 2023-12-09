@@ -1,8 +1,9 @@
-# DogWalking App Database Schema
+# โครงสร้างฐานข้อมูล
 
-This repository contains the SQL schema for a DogWalking application's database. The schema includes tables for user profiles, authentication, dog walkers, dogs, dog walk bookings, and reviews.
+ในที่นี้มีสกีมาเบส SQL สำหรับฐานข้อมูลแอปพลิเคชัน DogWalking ประกอบด้วยตารางสำหรับโปรไฟล์ผู้ใช้, การยืนยันตัวตน, ผู้เดินสุนัข, สุนัข, การจองการเดินสุนัข, และรีวิว
 
-## Table of Contents
+## สารบัญ
+- [ENUM](#ENUM)
 - [UserProfiles](#userprofiles)
 - [UserAuthentication](#userauthentication)
 - [DogWalkers](#dogwalkers)
@@ -10,11 +11,27 @@ This repository contains the SQL schema for a DogWalking application's database.
 - [DogWalkBookings](#dogwalkbookings)
 - [DogWalkerReviews](#dogwalkerreviews)
 - [Indexes](#indexes)
-- [Sample Data](#sample-data)
+
+
+## ENUM
+
+ก่อนที่จะทำการสร้างตาราง เราจำเป็นต้องสร้างประเภทข้อมูล ENUM ก่อน เพื่อให้สามารถกำหนดค่าตัวแปรของบางคอลัมน์ได้แบบจำกัด
+
+### UserType (ประเภทผู้ใช้)
+ - ประกอบด้วยค่า: 'Normal' (ผู้ใช้ทั่วไป), 'DogWalkers' (ผู้เดินสุนัข)
+
+### DogSize (ขนาดของสุนัข)
+ - ประกอบด้วยค่า: 'Small' (ขนาดเล็ก), 'Medium' (ขนาดกลาง), 'Big' (ขนาดใหญ่)
+
+### State (สถานะ)
+ - ประกอบด้วยค่า: 'Confirm' (ยืนยัน), 'Cancel' (ยกเลิก), 'Pending' (รอดำเนินการ)
+
+### Verify (การยืนยัน)
+ - ประกอบด้วยค่า: 'true' (จริง), 'false' (เท็จ)
 
 ## UserProfiles
 
-The `UserProfiles` table stores information about users, including their profile image, username, name, email, phone number, and user type.
+ตาราง `UserProfiles` เก็บข้อมูลเกี่ยวกับผู้ใช้ รวมถึงภาพโปรไฟล์, ชื่อผู้ใช้, ชื่อ, อีเมล, เบอร์โทร, และประเภทผู้ใช้
 
 | Column Name   | Data Type          | Constraints                           |
 |---------------|--------------------|----------------------------------------|
@@ -32,7 +49,7 @@ The `UserProfiles` table stores information about users, including their profile
 
 ## UserAuthentication
 
-The `UserAuthentication` table stores information related to user authentication, including public key, server private key, and shared key.
+ตาราง `UserAuthentication` เก็บข้อมูลเกี่ยวกับการยืนยันตัวตนของผู้ใช้ รวมถึง public key, server private key, และ shared key
 
 | Column Name         | Data Type  | Constraints                                   |
 |---------------------|------------|-----------------------------------------------|
@@ -45,7 +62,7 @@ The `UserAuthentication` table stores information related to user authentication
 
 ## DogWalkers
 
-The `DogWalkers` table stores information about dog walkers, including their location, ID card number, verification status, and pricing for different dog sizes.
+ตาราง `DogWalkers` เก็บข้อมูลเกี่ยวกับผู้เดินสุนัข รวมถึงที่ตั้ง, เลขบัตรประชาชน, สถานะการยืนยันตัวตน, และราคาต่างๆ สำหรับขนาดสุนัขที่ต่างกัน
 
 | Column Name     | Data Type  | Constraints                                        |
 |-----------------|------------|----------------------------------------------------|
@@ -62,7 +79,7 @@ The `DogWalkers` table stores information about dog walkers, including their loc
 
 ## Dogs
 
-The `Dogs` table stores information about dogs, including their image, breed, and size.
+ตาราง `Dogs` เก็บข้อมูลเกี่ยวกับสุนัข รวมถึงภาพ, สายพันธุ์, และขนาด
 
 | Column Name | Data Type  | Constraints                               |
 |-------------|------------|-------------------------------------------|
@@ -75,7 +92,7 @@ The `Dogs` table stores information about dogs, including their image, breed, an
 
 ## DogWalkBookings
 
-The `DogWalkBookings` table stores information about dog walk bookings, including the walker, user, dog, status, and timestamps.
+ตาราง `DogWalkBookings` เก็บข้อมูลเกี่ยวกับการจองการเดินสุนัข รวมถึงเดินสุนัข, ผู้ใช้, สุนัข, สถานะ, และเวลา
 
 | Column Name | Data Type     | Constraints                                  |
 |-------------|---------------|----------------------------------------------|
@@ -92,7 +109,7 @@ The `DogWalkBookings` table stores information about dog walk bookings, includin
 
 ## DogWalkerReviews
 
-The `DogWalkerReviews` table stores reviews from users about dog walkers.
+ตาราง `DogWalkerReviews` เก็บรีวิวจากผู้ใช้เกี่ยวกับผู้เดินสุนัข
 
 | Column Name | Data Type     | Constraints                                  |
 |-------------|---------------|----------------------------------------------|
@@ -106,7 +123,7 @@ The `DogWalkerReviews` table stores reviews from users about dog walkers.
 
 ## Indexes
 
-To improve search performance, the following indexes have been added:
+เพื่อเพิ่มประสิทธิภาพในการค้นหา ได้ทำการเพิ่มดัชนีต่อไปนี้:
 
 - `idx_users_email` on `UserProfiles(email)`
 - `idx_reviews_walkerid` on `DogWalkerReviews(walker_id)`
@@ -115,8 +132,3 @@ To improve search performance, the following indexes have been added:
 - `idx_users_server_private_key` on `UserAuthentication(server_private_key)`
 - `idx_share_key` on `UserAuthentication(shared_key)`
 
-## Sample Data
-
-Sample data has been added to the tables for testing purposes. You can find the sample data insertion queries at the end of the SQL script.
-
-Feel free to use or modify this schema for your DogWalking application's database.
