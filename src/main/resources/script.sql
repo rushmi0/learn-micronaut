@@ -2,7 +2,7 @@
 CREATE TYPE UserType AS ENUM ('Normal', 'DogWalkers');
 CREATE TYPE DogSize AS ENUM ('Small', 'Medium', 'Big');
 CREATE TYPE State AS ENUM ('Confirm', 'Cancel', 'Pending');
-
+CREATE TYPE Verify AS ENUM ('true', 'false');
 
 -- //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -14,14 +14,17 @@ CREATE TABLE IF NOT EXISTS UserProfiles
     username      VARCHAR(255) UNIQUE,                                                    -- ชื่อของผู้ใช้ที่ไม่ซ้ำกัน
     first_name    VARCHAR(255),
     last_name     VARCHAR(255),
+    bank_name     VARCHAR(255) DEFAULT 'N/A',
+    bank_number   INTEGER CHECK (LENGTH(CAST(bank_number AS VARCHAR)) = 10),              -- bank_number ต้องมีความยาวที่เท่ากับ 10 ตัวตัวเลข.
     email         VARCHAR(255) CHECK (email LIKE '%_@_%._%') UNIQUE,
     phone_number  VARCHAR(10) UNIQUE,
     created_at    TIMESTAMPTZ  DEFAULT now(),
     user_type     UserType,                                                               -- Normal, DogWalkers
-    verification  VARCHAR(5)   DEFAULT 'false' CHECK ( verification IN ('true', 'false')) -- กำหนดค่าเริ่มต้นเป็น FALSE
+    verification  Verify       DEFAULT 'false' CHECK ( verification IN ('true', 'false')) -- กำหนดค่าเริ่มต้นเป็น false
 );
 
-SELECT public_key FROM userauthentication;
+SELECT public_key
+FROM userauthentication;
 -- //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 -- สร้างตาราง UserAuthentication สำหรับเก็บข้อมูลการยืนยันตัวตนของผู้ใช้
