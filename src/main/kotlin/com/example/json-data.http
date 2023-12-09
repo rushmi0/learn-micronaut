@@ -1,6 +1,6 @@
 ### GET Request Query Parameters
 
-GET http://localhost:8080/api/process-json?name=bob%20space&value=40
+GET http://localhost:8080/api/filter?type=Fruit&price=4
 
 ### GET Request Path Variables
 
@@ -8,7 +8,8 @@ GET http://localhost:8080/api/ชามะนาว/30
 
 ###
 
-GET http://localhost:8080/api/filter?type=Dessert&price=0
+GET http://localhost:8080/api
+Hellodata: aaa
 
 ### Nostr Relay Response
 

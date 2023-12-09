@@ -1,25 +1,63 @@
 package com.example
 
 import io.micronaut.core.annotation.Introspected
+import io.micronaut.http.HttpRequest
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.PathVariable
-import io.micronaut.http.annotation.QueryValue
+import io.micronaut.http.annotation.*
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import io.micronaut.serde.annotation.Serdeable
-import java.util.Optional
+import java.util.*
 import java.util.stream.Collectors
 
+/**
+ * This class represents a controller that handles API requests.
+ *
+ * @constructor Creates a new instance of MyController with the specified base path.
+ * @param basePath The base path for the API endpoints handled by this controller.
+ */
 @Controller("/api")
 class MyController {
 
+    /**
+     * Retrieves the User-Agent and Hellodata from the given HttpRequest.
+     *
+     * @param request The HttpRequest object.
+     * @return A string containing the User-Agent and Hellodata from the request.
+     */
+    @Status(HttpStatus.OK)
+    @Get
+    fun getData(request: HttpRequest<*>): String {
+        val user_agent = request.headers.get("User-Agent")
+        val hello_data = request.headers.get("Hellodata")
+
+        return "User-Agent of the request is: $user_agent \nHellodata: $hello_data"
+    }
+
+    /**
+     * Represents a request data object.
+     *
+     * @property name The name of the request data.
+     * @property value The optional value of the request data.
+     */
     @Introspected
     data class MyRequestData(
         val name: String,
         val value: Optional<Int>
     )
 
-    @Get("/query-value", produces = [MediaType.APPLICATION_JSON])
+    /**
+     * Queries the JSON data based on the provided parameters.
+     *
+     * @param name The name parameter for querying the JSON data.
+     * @param value The optional value parameter for querying the JSON data.
+     * @return A string representation of the JSON data retrieved using the provided parameters.
+     */
+    @Get(
+        value = "/query-value",
+        produces = [MediaType.APPLICATION_JSON]
+    )
     fun queryJsonData(
         @QueryValue("name") name: String,
         @QueryValue("value") value: Optional<Int>
@@ -28,7 +66,16 @@ class MyController {
         return "Received JSON data: $requestData"
     }
 
+
+    /**
+     * Retrieves the item and number based on the provided path variables.
+     *
+     * @param value The value of the item.
+     * @param index The index of the number.
+     * @return A string representation of the item and number.
+     */
     @Get("/{value}/{index}")
+    @ExecuteOn(TaskExecutors.IO)
     fun pathVariables(
         @PathVariable value: String,
         @PathVariable index: Int
@@ -68,7 +115,7 @@ class MyController {
     )
 
     // * GET Request Query Parameters
-    @Get("/filter{?type,name,price}")
+    @Get("/filter{?type,name,price}", produces = [MediaType.APPLICATION_JSON])
     fun getFruitName(
         @QueryValue("type") type: Optional<String>,
         @QueryValue("name") name: Optional<String>,
@@ -89,8 +136,6 @@ class MyController {
             }
             .collect(Collectors.toList())
     }
-
-
 
 
 }
