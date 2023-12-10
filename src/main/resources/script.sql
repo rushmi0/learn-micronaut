@@ -91,7 +91,6 @@ EXECUTE FUNCTION calculate_duration();
 ALTER TABLE DogWalkBookings
     ADD COLUMN total INTEGER;
 
--- สร้างฟังก์ชันคำนวณราคา
 CREATE OR REPLACE FUNCTION calculate_total()
     RETURNS TRIGGER AS $$
 DECLARE
@@ -99,6 +98,7 @@ DECLARE
     price INTEGER;
     total_minutes INTEGER;
     hours INTEGER;
+    minutes INTEGER;
 BEGIN
     -- ดึงขนาดของหมา
     SELECT size INTO dog_size_enum FROM Dogs WHERE dog_id = NEW.dog_id;
@@ -117,13 +117,16 @@ BEGIN
 
     -- คำนวณราคาทั้งหมด
     total_minutes := EXTRACT(EPOCH FROM (NEW.time_end - NEW.time_start)) / 60;
-    hours := total_minutes / 60;
+    hours := FLOOR(total_minutes / 60);
+    minutes := total_minutes % 60;
 
-    NEW.total := hours * price;
+    -- คำนวณราคาตามชั่วโมงและชั่วโมงครึ่ง
+    NEW.total := (hours + (CASE WHEN minutes > 0 THEN 0.5 ELSE 0 END)) * price;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
 
 -- สร้างทริกเกอร์
 CREATE TRIGGER tr_dogwalkbookings_calculate_total
@@ -179,6 +182,7 @@ VALUES (1, 'Park A', 1234567890, 'true', 50, 60, 70),
        (3, 'Park C', 5551112233, 'true', 40, 50, 60),
        (4, 'Park D', 9998887777, 'false', 55, 65, 75),
        (5, 'Park E', 1231231234, 'true', 60, 70, 80);
+
 
 -- ข้อมูลจำลองสำหรับ Dogs
 INSERT INTO Dogs (dog_image, breed_name, size)
