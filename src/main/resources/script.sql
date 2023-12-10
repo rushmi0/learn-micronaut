@@ -36,6 +36,23 @@ CREATE TABLE IF NOT EXISTS DogWalkers
     price_big      INTEGER      NOT NULL                                       DEFAULT 0
 );
 
+CREATE OR REPLACE FUNCTION update_verification()
+    RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.id_card_number IS NOT NULL AND NEW.verification = 'false' THEN
+        NEW.verification := 'true';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tr_dogwalkers_update_verification
+    BEFORE INSERT OR UPDATE
+    ON DogWalkers
+    FOR EACH ROW
+EXECUTE FUNCTION update_verification();
+
+
 
 -- //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -176,12 +193,12 @@ VALUES ('profile1.jpg', 'user1', 'John', 'Doe', 'john.doe@email.com', '123456789
         'bb787fcc86e4d5fedf3df9587104e88246ead292b34858ef4ef0b0693f7f20e4', 'Normal');
 
 -- ข้อมูลจำลองสำหรับ DogWalkers
-INSERT INTO DogWalkers (user_id, location_name, id_card_number, verification, price_small, price_medium, price_big)
-VALUES (1, 'Park A', 1234567890, 'true', 50, 60, 70),
-       (2, 'Park B', 9876543210, 'false', 45, 55, 65),
-       (3, 'Park C', 5551112233, 'true', 40, 50, 60),
-       (4, 'Park D', 9998887777, 'false', 55, 65, 75),
-       (5, 'Park E', 1231231234, 'true', 60, 70, 80);
+INSERT INTO DogWalkers (user_id, location_name, id_card_number, price_small, price_medium, price_big)
+VALUES (1, 'Park A', 1234567890, 50, 60, 70),
+       (2, 'Park B', 9876543210, 45, 55, 65),
+       (3, 'Park C', 5551112233, 40, 50, 60),
+       (4, 'Park D', 9998887777, 55, 65, 75),
+       (5, 'Park E', 1231231234, 60, 70, 80);
 
 
 -- ข้อมูลจำลองสำหรับ Dogs
