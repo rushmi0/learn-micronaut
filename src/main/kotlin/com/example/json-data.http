@@ -15,3 +15,14 @@ Hellodata: aaa
 
 GET https://relay.siamstr.com
 
+
+###
+
+POST http://localhost:8080/user/sign-up
+Content-Type: application/json
+AccountType: YourAccountType
+
+{
+  "userName": "JohnDoe",
+  "authKey": "mySecretKey"
+}

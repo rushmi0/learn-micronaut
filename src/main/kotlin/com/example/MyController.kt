@@ -28,6 +28,7 @@ class MyController {
      */
     @Status(HttpStatus.OK)
     @Get
+    @ExecuteOn(TaskExecutors.IO)
     fun getData(request: HttpRequest<*>): String {
         val user_agent = request.headers.get("User-Agent")
         val hello_data = request.headers.get("Hellodata")
