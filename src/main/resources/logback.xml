@@ -12,13 +12,13 @@
     </appender>
 
 
-    <logger name="com.example.hello" level="DEBUG"/>
-<!--    <Logger name="io.micronaut.context.condition" level="DEBUG"/>-->
+<!--    <logger name="com.example.hello" level="DEBUG"/>-->
+    <logger name="io.micronaut.http.client" level="TRACE"/>
+    <Logger name="io.micronaut.context.condition" level="DEBUG"/>
 
 <!--  info  trace-->
     <root level="info">
         <appender-ref ref="STDOUT"/>
-
     </root>
 
 </configuration>
