@@ -1,5 +1,5 @@
 
-PUT http://localhost:8080/hello/123
+POST http://localhost:8080/hello/123
 Content-Type: application/json
 
 {

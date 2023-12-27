@@ -7,11 +7,12 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Put
 import io.micronaut.serde.annotation.Serdeable
 import org.slf4j.LoggerFactory
 
-@Controller("hello")
+@Controller("/")
 class HelloAPIController(
     private val service: MyServiceImp,
     @Value("\${hello.world.message}") private val helloAPIConfig: String,
@@ -27,7 +28,7 @@ class HelloAPIController(
         val age: Int
     )
 
-    @Put(
+    @Post(
         uri = "/{id}",
         consumes = [MediaType.APPLICATION_JSON],
         produces = [MediaType.APPLICATION_JSON]
@@ -50,6 +51,7 @@ class HelloAPIController(
     // * Configuration Injection
     @Get(uri = "/config", produces = [MediaType.TEXT_PLAIN])
     fun helloConfig(): String {
+        println("This [${helloAPIConfig.length} : $helloAPIConfig]")
         LOG.debug("Return Hello API from Config Message: $helloAPIConfig")
         return helloAPIConfig
     }
