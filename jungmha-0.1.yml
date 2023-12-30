@@ -1,0 +1,572 @@
+openapi: 3.0.1
+info:
+  title: Jungmha
+  description: เอกสารนี้เป็นคู่มือการใช้งาน API
+  termsOfService: https://github.com/rushmi0/Jungmha
+  contact:
+    name: Rushmi0
+    url: https://snort.social/nprofile1qqswfvkxfu8yu49tkdx4vfxdqs8qtmx80uxyvlxydckvf4d7nz478cccayvnq
+  license:
+    name: MIT License
+    url: https://github.com/rushmi0/Jungmha/blob/backend/LICENSE
+  version: "0.1"
+security:
+- Access-Token:
+  - view-only
+  - full-control
+paths:
+  /:
+    get:
+      operationId: index
+      responses:
+        "200":
+          description: index 200 response
+          content:
+            text/html:
+              schema:
+                type: string
+  /api/v1/auth/home/filter:
+    get:
+      summary: เมธอดสำหรับการดึงข้อมูล Dog Walker จากฐานข้อมูล
+      description: เมธอดสำหรับการดึงข้อมูล Dog Walker จากฐานข้อมูล
+      operationId: getPrivateDogWalker
+      parameters:
+      - name: Access-Token
+        in: header
+        description: ข้อมูล Token ที่ใช้ในการตรวจสอบสิทธิ์
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: ชื่อของ Dog Walker (สามารถไม่ระบุ)
+        schema:
+          type: string
+          nullable: true
+      - name: verify
+        in: query
+        description: สถานะการตรวจสอบข้อมูล (สามารถไม่ระบุ)
+        schema:
+          type: string
+          nullable: true
+      - name: location
+        in: query
+        description: สถานที่ที่ Dog Walker ทำงาน (สามารถไม่ระบุ)
+        schema:
+          type: string
+          nullable: true
+      - name: pSmall
+        in: query
+        description: ราคาสำหรับการเดินสุนัขขนเล็ก (สามารถไม่ระบุ)
+        schema:
+          type: integer
+          format: int64
+          nullable: true
+      - name: pMedium
+        in: query
+        description: ราคาสำหรับการเดินสุนัขขนกลาง (สามารถไม่ระบุ)
+        schema:
+          type: integer
+          format: int64
+          nullable: true
+      - name: pBig
+        in: query
+        description: ราคาสำหรับการเดินสุนัขขนใหญ่ (สามารถไม่ระบุ)
+        schema:
+          type: integer
+          format: int64
+          nullable: true
+      - name: max
+        in: query
+        description: "จำนวนข้อมูลสูงสุดที่ต้องการแสดงผล (สามารถไม่ระบุ, ค่าเริ่มต้\
+          นคือ Integer.MAX_VALUE)"
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+      responses:
+        "200":
+          description: HttpResponse สำหรับผลลัพธ์ของการดึงข้อมูล Dog Walker
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrivateDogWalkerInfo'
+  /api/v1/auth/open-channel:
+    post:
+      summary: สำหรับการเปิดช่องสื่อสาร (Open Channel)
+      description: สำหรับการเปิดช่องสื่อสาร (Open Channel)
+      operationId: openChannel
+      requestBody:
+        description: ข้อมูลที่ใช้ในการกำหนดตัวตนของผู้ใช้
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identity'
+        required: true
+      responses:
+        "200":
+          description: HttpResponse แจ้งเตือนหรือคืนค่าสถานะของการเปิดช่องสื่อสาร
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v1/auth/sign-in/{username}:
+    get:
+      summary: สำหรับการดำเนินการเข้าสู่ระบบ
+      description: สำหรับการดำเนินการเข้าสู่ระบบ
+      operationId: signIn
+      parameters:
+      - name: Signature
+        in: header
+        description: ลายเซ็นที่ใช้ในการตรวจสอบความถูกต้องของข้อมูล
+        required: true
+        schema:
+          type: string
+      - name: username
+        in: path
+        description: ชื่อผู้ใช้
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: HttpResponse พร้อมกับข้อมูล Token หากการเข้าสู่ระบบสำเร็จ
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v1/auth/sign-up:
+    patch:
+      summary: สำหรับการลงทะเบียนผู้ใช้
+      description: "ทำการ Encrypt ชุดข้อมูลส่วนบุคคลด้วย AES ก่อนส่งไปที่ Server ด\
+        ้วยรูปแบบข้อมูลนี้ \n \"content\" : \"string\""
+      operationId: signUp
+      parameters:
+      - name: UserName
+        in: header
+        description: ชื่อผู้ใช้
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: ข้อมูลที่ถูกเข้ารหัสแล้วที่จะถูกใช้ในการลงทะเบียน
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileForm'
+        required: true
+      responses:
+        "200":
+          description: HttpResponse แจ้งเตือนหรือคืนค่าสถานะของการลงทะเบียน
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+      security:
+      - Access-Token: []
+  /api/v1/auth/user/booking:
+    post:
+      summary: เมธอดสำหรับการทำการจองบริการพาเดินสุนัขเดินเล่น
+      description: เมธอดสำหรับการทำการจองบริการพาเดินสุนัขเดินเล่น
+      operationId: booking
+      parameters:
+      - name: Access-Token
+        in: header
+        description: ข้อมูล Token ที่ใช้ในการตรวจสอบสิทธิ์
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: ข้อมูลการจองบริการ
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DogWalkBookings'
+        required: true
+      responses:
+        "200":
+          description: HttpResponse สำหรับผลลัพธ์ของการจอง
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - Access-Token: []
+  /api/v1/auth/user/upload:
+    post:
+      summary: เมธอดสำหรับการอัปโหลดไฟล์
+      description: เมธอดสำหรับการอัปโหลดไฟล์
+      operationId: uploadFile
+      parameters:
+      - name: Access-Token
+        in: header
+        description: ข้อมูล Token สำหรับตรวจสอบสิทธิ์การอัปโหลด
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - ""
+              type: object
+              properties:
+                ? ""
+                : type: string
+                  description: ไฟล์ที่จะอัปโหลด
+                  format: binary
+            encoding:
+              ? ""
+              : contentType: application/octet-stream
+        required: true
+      responses:
+        "200":
+          description: HttpResponse แสดงผลลัพธ์ของการอัปโหลด
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/dog/{name}/image/{fingerprint}/{file}:
+    get:
+      summary: สำหรับการแสดงภาพโปรไฟล์ของสุนัข
+      description: สำหรับการแสดงภาพโปรไฟล์ของสุนัข
+      operationId: openImageDogsURL
+      parameters:
+      - name: name
+        in: path
+        description: ชื่อของสุนัข
+        required: true
+        schema:
+          type: string
+      - name: fingerprint
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: file
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: HttpResponse พร้อมกับข้อมูลภาพ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
+  /api/v1/dogs:
+    get:
+      operationId: getDogs
+      responses:
+        "200":
+          description: getDogs 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DogField'
+  /api/v1/home/filter:
+    get:
+      summary: เมธอดสำหรับการดึงข้อมูล Public Dog Walker ตามเงื่อนไขที่ระบุ
+      description: เมธอดสำหรับการดึงข้อมูล Public Dog Walker ตามเงื่อนไขที่ระบุ
+      operationId: getPublicDogWalker
+      parameters:
+      - name: name
+        in: query
+        description: ชื่อของ Dog Walker (ถ้ามี)
+        schema:
+          type: string
+          nullable: true
+      - name: verify
+        in: query
+        description: สถานะการตรวจสอบ (ถ้ามี)
+        schema:
+          type: string
+          nullable: true
+      - name: location
+        in: query
+        description: สถานที่ที่ Dog Walker ทำงาน (ถ้ามี)
+        schema:
+          type: string
+          nullable: true
+      - name: pSmall
+        in: query
+        description: ราคาต่ำสุดสำหรับขนาดเล็ก (ถ้ามี)
+        schema:
+          type: integer
+          format: int64
+          nullable: true
+      - name: pMedium
+        in: query
+        description: ราคาต่ำสุดสำหรับขนาดกลาง (ถ้ามี)
+        schema:
+          type: integer
+          format: int64
+          nullable: true
+      - name: pBig
+        in: query
+        description: ราคาต่ำสุดสำหรับขนาดใหญ่ (ถ้ามี)
+        schema:
+          type: integer
+          format: int64
+          nullable: true
+      - name: max
+        in: query
+        description: จำนวนข้อมูลสูงสุดที่ต้องการแสดงผล (ถ้าไม่ระบุให้ใช้ค่า Integer.MAX_VALUE)
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+      responses:
+        "200":
+          description: ข้อมูลสำหรับผู้ที่ไม่มีบัญชีในระบบ ตามเงื่อนไขที่ระบุ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicDogWalkerInfo'
+  /api/v1/user/{name}/image/{fingerprint}:
+    get:
+      summary: เมธอดสำหรับการเปิด URL รูปภาพของผู้ใช้
+      description: เมธอดสำหรับการเปิด URL รูปภาพของผู้ใช้
+      operationId: openImageURL
+      parameters:
+      - name: name
+        in: path
+        description: ชื่อผู้ใช้
+        required: true
+        schema:
+          type: string
+      - name: fingerprint
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: HttpResponse ที่มีข้อมูลของไฟล์รูปภาพ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
+  /jungmha:
+    get:
+      operationId: index_1
+      responses:
+        "200":
+          description: index_1 200 response
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  schemas:
+    ApiResponseToken:
+      required:
+      - fullControl
+      - viewOnly
+      type: object
+      properties:
+        fullControl:
+          type: string
+        viewOnly:
+          type: string
+    DogField:
+      required:
+      - breedName
+      - dogId
+      - dogImage
+      - size
+      type: object
+      properties:
+        dogId:
+          type: integer
+          format: int32
+        dogImage:
+          type: string
+        breedName:
+          type: string
+        size:
+          type: string
+    DogWalkBookings:
+      required:
+      - bookingDate
+      - dogID
+      - timeEnd
+      - timeStart
+      - walkerID
+      type: object
+      properties:
+        walkerID:
+          type: integer
+          format: int32
+        dogID:
+          type: integer
+          format: int32
+        bookingDate:
+          type: string
+          format: date
+        timeStart:
+          type: string
+          format: partial-time
+        timeEnd:
+          type: string
+          format: partial-time
+    Identity:
+      required:
+      - authenKey
+      - userName
+      type: object
+      properties:
+        userName:
+          type: string
+        authenKey:
+          type: string
+    PriceData:
+      required:
+      - big
+      - medium
+      - small
+      type: object
+      properties:
+        small:
+          type: integer
+          format: int32
+        medium:
+          type: integer
+          format: int32
+        big:
+          type: integer
+          format: int32
+    PrivateDogWalkerInfo:
+      required:
+      - contact
+      - countReview
+      - detail
+      - review
+      - totalReview
+      - walkerID
+      type: object
+      properties:
+        walkerID:
+          type: integer
+          format: int32
+        detail:
+          $ref: '#/components/schemas/WalkerDetail'
+        countReview:
+          type: integer
+          format: int32
+        totalReview:
+          type: integer
+          format: int32
+        contact:
+          $ref: '#/components/schemas/WalkerContact'
+        review:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalkerReview'
+    PublicDogWalkerInfo:
+      required:
+      - detail
+      - walkerID
+      type: object
+      properties:
+        walkerID:
+          type: integer
+          format: int32
+        detail:
+          $ref: '#/components/schemas/WalkerDetail'
+    TokenResponse:
+      required:
+      - token
+      type: object
+      properties:
+        token:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiResponseToken'
+    UserProfileForm:
+      required:
+      - email
+      - firstName
+      - lastName
+      - phoneNumber
+      - userType
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        userType:
+          type: string
+    WalkerContact:
+      required:
+      - email
+      - phoneNumber
+      type: object
+      properties:
+        email:
+          type: string
+        phoneNumber:
+          type: string
+    WalkerDetail:
+      required:
+      - location
+      - name
+      - price
+      - profileImage
+      - verify
+      type: object
+      properties:
+        name:
+          type: string
+        profileImage:
+          type: string
+        verify:
+          type: string
+        location:
+          type: string
+        price:
+          $ref: '#/components/schemas/PriceData'
+    WalkerReview:
+      required:
+      - name
+      - profileImage
+      - rating
+      - reviewText
+      - userID
+      type: object
+      properties:
+        userID:
+          type: integer
+          format: int32
+        name:
+          type: string
+        profileImage:
+          type: string
+        rating:
+          type: integer
+          format: int32
+        reviewText:
+          type: string
+  securitySchemes:
+    Access-Token:
+      type: apiKey
+      name: Access-Token
+      in: header
